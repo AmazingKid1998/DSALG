@@ -1,84 +1,3 @@
-class Stack:
-    def __init__(self,size):
-        self.data=[]
-        self.top=-1 #the top index is -1 so that after the first push it becomes 0 and points to the first element of the stack
-        self.size=size
-    
-    def push(self,new_data):
-        if self.top<self.size:
-            self.data.append(new_data)
-            self.top+=1
-        else:
-            raise OverflowError(f"Stack Already Full")
-    
-    def pop(self):
-        if self.top>=0:
-            popped_item=self.data[self.top]
-            del self.data[self.top]
-            self.top-=1
-            return popped_item
-        else:
-            raise IndentationError(f"The stack is empty!")
-    
-    def peek(self):
-        if self.top>=0:
-            #print(f"{self.data[self.top]}")
-            return self.data[self.top]
-        else:
-            raise IndentationError(f"The stack is empty")
-    
-    def length(self):
-        #print(f"Length is {self.top+1}")
-        return self.top + 1
-        
-
-def stack_tester():
-    stack1=Stack(10)
-    stack1.push(5)
-    stack1.push(7)
-    print(stack1.data)
-    stack1.pop()
-    #stack1.pop()
-    #stack1.pop()
-    print(stack1.data)
-    
-
-class Queue:
-    
-    def __init__(self,size):
-        self.data=[]
-        self.size=size
-        self.head=0
-        self.tail=-1
-        
-    def enqueue(self,new_data):
-        if self.tail<self.size:
-            self.data.append(new_data)
-            self.tail+=1
-        else:
-            print(f" Queue Already full")
-            
-    def dequeue(self):
-        if self.tail<self.head:
-            item=self.data[self.head]
-            del self.data[self.head]
-            self.head+=1
-            
-            return item
-        else:
-            print(f"The queue is empty")
-    
-    def length(self):
-        print (f"The length is {self.tail+1}")
-    
-    def peek(self):
-        if self.tail>=0:
-            print(f"{self.data[self.tail]}")
-            return self.data[self.tail]
-        else:
-            print(f"The queue is empty")
-        
-
 class CircularQueue:
     def __init__(self,size):
         self.data=[None]*size
@@ -88,64 +7,146 @@ class CircularQueue:
     
     def enqueue(self,new_data):
         if self.tail-self.head == self.size:
-            raise OverflowError("Queue already full")
-        new_index=self.tail % self.size
-        self.tail+=1
+            raise OverflowError("Queue is full")
+        new_index=self.tail%self.size
         self.data[new_index]=new_data
+        self.tail+=1
     
     def dequeue(self):
-        if self.tail==self.head:
-            raise IndexError(f"Cannot delete from empty queue")
-        new_index=self.head % self.size
-        self.head+=1
+        if self.head==self.tail:
+            raise IndexError("Queue is empty")
+        new_index=self.head%self.size
         removed_item=self.data[new_index]
-        #print(f"{removed_item}")
+        self.head+=1
         return removed_item
-        #del self.data[new_index]
     
     def peek(self):
-        if self.tail==self.head:
-            raise IndexError(f"Cannot peek from empty queue")
-        new_index=self.head % self.size
-        return self.data[new_index]
+        if self.head==self.tail:
+            raise IndexError("Queue is empty")
+        return self.data[self.tail % self.size]
     
     def length(self):
         return self.tail-self.head
     
     def __str__(self):
-        items=[]
+        output=f"The queue is: "
         for i in range(self.head,self.tail):
-            items.append(self.data[i%self.size])
-        return f"Queue is {items}"
-            
+            output+=f"{self.data[i%self.size]}"
+        
+        return output
+    
 
 def circular_queue_tester():
-    cq=CircularQueue(15)
-    for i in range(15):
+    cq=CircularQueue(10)
+    for i in range(10):
         cq.enqueue(i)
     
-    print(cq)
-    for i in range(10):
-        cq.dequeue()
-    print(cq)
-    cq.enqueue(200)
+    cq.dequeue()
+    cq.dequeue()
+    cq.enqueue(15)
+    
     print(cq)
 
+#circular_queue_tester()
+
+class Stack:
+    def __init__(self,size):
+        self.data=[]
+        self.size=size
+        self.top=-1
+    
+    def push(self,new_data):
+        if self.top<self.size:
+            self.data.append(new_data)
+            self.top+=1
+        else:
+            raise OverflowError("Stack is Full")
+    def pop(self):
+        if self.top<0:
+            raise IndexError("Stack is empty")
+        item=self.data[self.top]
+        del self.data[self.top]
+        self.top-=1
+        return item
+    
+    def peek(self):
+        if self.top<0:
+            raise IndexError("Stack is empty")
+        return self.data[self.top]
+    
+    def length(self):
+        return self.top+1
+
+def stack_tester():
+    stack1=Stack(10)
+    for i in range(10):
+        stack1.push(i)
+    print(stack1.data)
+    items=[]
+    items.append(stack1.pop())
+    print(items)
+    print(stack1.data)
+
+#stack_tester()
+
+class Queue:
+    def __init__(self,size):
+        self.data=[]
+        self.size=size
+        self.head=0
+        self.tail=-1
+    
+    def enqueue(self,new_data):
+        if self.tail==self.size:
+            raise OverflowError("Queue full")
+        self.data.append(new_data)
+        self.tail+=1
+    
+    def dequeue(self):
+        if self.tail-self.head<=0:
+            raise IndexError("Queue empty")
+        item=self.data[self.head]
+        self.head+=1
+        return item
+    
+    def length(self):
+        return self.tail-self.head
+    
+    def peek(self):
+        if self.head ==self.tail:
+            raise IndexError("queue empty")
+        return self.data[self.tail]
+    
+    def __str__(self):
+        output=f"The Queue is :"
+        for i in range(self.head,self.tail+1):
+            output+=f" {self.data[i]} "
+        return output
+
+def queue_tester():
+    q1=Queue(5)
+    for i in range(5):
+        q1.enqueue(i)
+    print(q1)
+    q1.dequeue()
+    print(q1)
+    q1.enqueue(6)
+    print(q1)
+
+#queue_tester()
 
 def remove_adjacent():
-    text=input("Enter string: ")
+    text=input("Input String: ")
     stack1=Stack(len(text))
-    for i in text:
-        if stack1.length()>1:
-            if stack1.peek() == i :
-                stack1.pop()
-            else:
-                stack1.push()
-        
+    for char in text:
+        if  stack1.length()>0 and stack1.peek() == char:
+            stack1.pop()
         else:
-            stack1.push(i)
+            stack1.push(char)
     
     print(stack1.data)
+
+#remove_adjacent()
 
 def valid_brackets():
     text=input("Enter string: ")
@@ -174,15 +175,9 @@ def valid_brackets():
         print ("True")
     else:
         print("False")
+    
+        
+    
         
         
     
-    
-    
-    
-            
-        
-        
-        
-            
-        
