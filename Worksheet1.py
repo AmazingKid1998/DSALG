@@ -9,7 +9,7 @@ class Stack:
             self.data.append(new_data)
             self.top+=1
         else:
-            print(f"Stack Already Full")
+            raise OverflowError(f"Stack Already Full")
     
     def pop(self):
         if self.top>=0:
@@ -18,17 +18,17 @@ class Stack:
             self.top-=1
             return popped_item
         else:
-            print(f"The stack is empty!")
+            raise IndentationError(f"The stack is empty!")
     
     def peek(self):
         if self.top>=0:
-            print(f"{self.data[self.top]}")
+            #print(f"{self.data[self.top]}")
             return self.data[self.top]
         else:
-            print(f"The stack is empty")
+            raise IndentationError(f"The stack is empty")
     
     def length(self):
-        print(f"Length is {self.top+1}")
+        #print(f"Length is {self.top+1}")
         return self.top + 1
         
 
@@ -81,7 +81,7 @@ class Queue:
 
 class CircularQueue:
     def __init__(self,size):
-        self.data=[]
+        self.data=[None]*size
         self.size=size
         self.head=0
         self.tail=0
@@ -91,19 +91,17 @@ class CircularQueue:
             raise OverflowError("Queue already full")
         new_index=self.tail % self.size
         self.tail+=1
-        self.data.insert(new_index,new_data)
+        self.data[new_index]=new_data
     
     def dequeue(self):
         if self.tail==self.head:
-            self.data=[]
-            self.head=0
-            self.tail=0
             raise IndexError(f"Cannot delete from empty queue")
         new_index=self.head % self.size
         self.head+=1
         removed_item=self.data[new_index]
-        print(f"{removed_item}")
-        del self.data[new_index]
+        #print(f"{removed_item}")
+        return removed_item
+        #del self.data[new_index]
     
     def peek(self):
         if self.tail==self.head:
@@ -113,6 +111,25 @@ class CircularQueue:
     
     def length(self):
         return self.tail-self.head
+    
+    def __str__(self):
+        items=[]
+        for i in range(self.head,self.tail):
+            items.append(self.data[i%self.size])
+        return f"Queue is {items}"
+            
+
+def circular_queue_tester():
+    cq=CircularQueue(15)
+    for i in range(15):
+        cq.enqueue(i)
+    
+    print(cq)
+    for i in range(10):
+        cq.dequeue()
+    print(cq)
+    cq.enqueue(200)
+    print(cq)
 
 
 def remove_adjacent():
@@ -132,21 +149,31 @@ def remove_adjacent():
 
 def valid_brackets():
     text=input("Enter string: ")
-    stack1=Stack(len(text))
-    stack2=Stack(len(text))
+    words=Stack(len(text))
+    brackets=Stack(len(text))
+    left_brackets=['(','{','[']
+    right_brackets=[')','}',']']
     for i in text:
-        if i == '(' or i == '{' or i == '[':
-            stack1.push(i)
-        elif (i == ']') and stack1.peek()=='[':
-            stack1.pop()
-        elif (i == '}') and stack1.peek()=='{':
-            stack1.pop()
-        elif (i == ')') and stack1.peek()=='(':
-            stack1.pop()
-    if stack1.length() > 0:
+        if i in left_brackets:
+            brackets.push(i)
+        elif (i == ']') and brackets.peek()=='[':
+            brackets.pop()
+        elif (i == '}') and brackets.peek()=='{':
+            brackets.pop()
+        elif (i == ')') and brackets.peek()=='(':
+            brackets.pop()
+        elif i in right_brackets :
+            print("Unmatched right bracket")
+            break
+        else:
+            words.push(i)
+            
+    if brackets.length() > 0:
         print("false")
-    else:
+    elif brackets.length()==0 and words.length()>0:
         print ("True")
+    else:
+        print("False")
         
         
     
