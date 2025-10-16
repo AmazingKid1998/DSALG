@@ -194,6 +194,25 @@ def valid_brackets():
         print ("True")
     else:
         print("False")
+
+
+def reverse_queue(input_queue):
+    size=len(input_queue)
+    queue1=Queue(size)
+    
+    for i in input_queue:
+        queue1.enqueue(i)
+    
+    stack1=Stack(size)
+    
+    
+    for i in range(size):
+        stack1.push(queue1.dequeue())
+    print(stack1)
+    
+    for i in range(size):
+        queue1.enqueue(stack1.pop())
+    print(queue1)
     
         
     
