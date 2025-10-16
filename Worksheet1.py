@@ -78,7 +78,12 @@ class Stack:
         return self.top+1
     
     def __str__(self):
-        output=f"The Stack is : {self.data}"
+        if self.top==-1:
+            output=f"Stack is empty"
+        else:
+            output=f"The Stack is :"
+            for i in range(self.top+1):
+                output+=f" {self.data[i]} "
         return output
 
 def stack_tester():
