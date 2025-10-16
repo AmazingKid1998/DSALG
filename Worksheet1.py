@@ -102,37 +102,50 @@ def stack_tester():
 #stack_tester()
 
 class Queue:
-    def __init__(self,size):
-        self.data=[None]*size
-        self.size=size
-        self.head=0
-        self.tail=-1
-    
-    def enqueue(self,new_data):
-        if self.tail-self.head+1==self.size:
+    def __init__(self, size):
+        self.data = [None] * size
+        self.size = size
+        self.head = 0
+        self.tail = -1
+
+    def enqueue(self, new_data):
+        if self.tail - self.head + 1 == self.size:
             raise OverflowError("Queue full")
-        self.tail+=1
-        self.data[self.tail]=new_data
-    
+        self.tail += 1
+        self.data[self.tail] = new_data
+
     def dequeue(self):
-        if self.tail<self.head:
+        if self.tail < self.head:
             raise IndexError("Queue empty")
-        item=self.data[self.head]
-        self.data[self.head]=None
-        self.head +=1
-        if self.head>self.tail:
-            self.head=0
-            self.tail=-1
+
+        # Get the front element
+        item = self.data[self.head]
+
+        # Shift all elements left by one (O(n))
+        i = self.head
+        while i < self.tail:
+            self.data[i] = self.data[i + 1]
+            i += 1
+
+        # Clear the last slot
+        self.data[self.tail] = None
+        self.tail -= 1
+
+        # Reset indices if empty
+        if self.tail < self.head:
+            self.head = 0
+            self.tail = -1
+
         return item
-    
+
     def length(self):
-        if self.tail<self.head:
-            return 0
         return self.tail-self.head+1
+
     def peek(self):
-        if self.tail<self.head:
+        if self.tail < self.head:
             raise IndexError("Queue empty")
         return self.data[self.head]
+
     def __str__(self):
         output=f"The queue is: "
         if self.tail<self.head:
