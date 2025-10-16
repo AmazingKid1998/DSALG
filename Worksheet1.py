@@ -17,6 +17,7 @@ class CircularQueue:
             raise IndexError("Queue is empty")
         new_index=self.head%self.size
         removed_item=self.data[new_index]
+        self.data[new_index]=None
         self.head+=1
         return removed_item
     
@@ -106,13 +107,13 @@ class Queue:
         self.tail=-1
     
     def enqueue(self,new_data):
-        if self.tail==self.size:
+        if self.tail+1==self.size:
             raise OverflowError("Queue full")
         self.tail+=1
         self.data[self.tail]=new_data
     
     def dequeue(self):
-        if self.tail==self.head:
+        if self.tail<self.head:
             raise IndexError("Queue empty")
         item=self.data[self.head]
         self.data[self.head]=None
@@ -120,17 +121,20 @@ class Queue:
         return item
     
     def length(self):
-        return self.tail-self.head
+        return self.tail-self.head +1
     
     def peek(self):
-        if self.tail==self.head:
+        if self.tail<self.head:
             raise IndexError("queue empty")
         return self.data[self.head]
     
     def __str__(self):
         output=f"The Queue is : "
-        for i in range (self.head,self.tail+1):
-            output+=f" {self.data[i]} "
+        if self.tail<self.head:
+            output+=f"Empty"
+        else:
+            for i in range (self.head,self.tail+1):
+                output+=f" {self.data[i]} "
         return output
 
 def queue_tester():
