@@ -151,7 +151,7 @@ class Queue:
         if self.tail<self.head:
             output+=f"Empty"
         else:
-            for i in range(self.head,self.tail+1):
+            for i in range(self.tail+1):
                 output+=f" {self.data[i]}"
         return output
 
