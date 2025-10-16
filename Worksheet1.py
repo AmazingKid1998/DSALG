@@ -145,6 +145,14 @@ class Queue:
         if self.tail < self.head:
             raise IndexError("Queue empty")
         return self.data[self.head]
+    
+    def reverse_queue(self):
+        stack=Stack(self.length())
+        while self.length()>0:
+            stack.push(self.dequeue())
+        while stack.length()>0:
+            self.enqueue(stack.pop())
+        print(self.data)
 
     def __str__(self):
         output=f"The queue is: "
