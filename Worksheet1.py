@@ -6,33 +6,37 @@ class CircularQueue:
         self.tail=0
     
     def enqueue(self,new_data):
-        if self.tail-self.head == self.size:
-            raise OverflowError("Queue is full")
-        new_index=self.tail%self.size
-        self.data[new_index]=new_data
+        if self.tail-self.head+1==self.size:
+            raise OverflowError("Queue full")
+        new_idx=self.tail%self.size
+        self.data[new_idx]=new_data
         self.tail+=1
     
     def dequeue(self):
-        if self.head==self.tail:
-            raise IndexError("Queue is empty")
-        new_index=self.head%self.size
-        removed_item=self.data[new_index]
-        self.data[new_index]=None
+        if self.tail==self.head:
+            raise IndexError("Queue empty")
+        new_idx=self.head%self.size
+        removed = self.data[new_idx]
+        self.data[new_idx]=None
         self.head+=1
-        return removed_item
-    
-    def peek(self):
-        if self.head==self.tail:
-            raise IndexError("Queue is empty")
-        return self.data[self.head % self.size]
+        return removed
     
     def length(self):
+        if self.tail==self.head:
+            return 0
         return self.tail-self.head
+    def peek(self):
+        if self.tail==self.head:
+            raise IndexError("Queue empty")
+        return self.data[self.head % self.size]
     
     def __str__(self):
-        output=f"The queue is: "
-        for i in range(self.head,self.tail):
-            output+=f"{self.data[i%self.size]}"
+        output=f"The Queue is: "
+        if self.head ==self.tail:
+            output+=f"Empty"
+        else:
+            for i in range (self.head,self.tail):
+                output+=f"{self.data[i%self.size]}"
         
         return output
     
@@ -57,34 +61,32 @@ class Stack:
         self.top=-1
     
     def push(self,new_data):
-        if self.top+1==self.size:
-            raise OverflowError("Stack is Full")
+        if self.top+1 == self.size:
+            raise OverflowError("Stack Full")
         self.top+=1
         self.data[self.top]=new_data
-        
+    
     def pop(self):
-        if self.top==-1:
-            raise IndexError("Stack is empty")
+        if self.top == -1:
+            raise IndexError("Stack empty")
         item=self.data[self.top]
         self.data[self.top]=None
         self.top-=1
         return item
-    
+    def length(self):
+        return self.top+1
     def peek(self):
         if self.top==-1:
             raise IndexError("Stack is empty")
         return self.data[self.top]
     
-    def length(self):
-        return self.top+1
-    
     def __str__(self):
+        output = f"The Stack is: "
         if self.top==-1:
-            output=f"Stack is empty"
+            output+=f"Empty"
         else:
-            output=f"The Stack is :"
             for i in range(self.top+1):
-                output+=f" {self.data[i]} "
+                output+=f"{self.data[i]}"
         return output
 
 def stack_tester():
@@ -107,7 +109,7 @@ class Queue:
         self.tail=-1
     
     def enqueue(self,new_data):
-        if self.tail+1==self.size:
+        if self.tail-self.head+1==self.size:
             raise OverflowError("Queue full")
         self.tail+=1
         self.data[self.tail]=new_data
@@ -117,24 +119,24 @@ class Queue:
             raise IndexError("Queue empty")
         item=self.data[self.head]
         self.data[self.head]=None
-        self.head+=1
+        self.head +=1
         return item
     
     def length(self):
-        return self.tail-self.head +1
-    
+        if self.tail<self.head:
+            return 0
+        return self.tail-self.head+1
     def peek(self):
         if self.tail<self.head:
-            raise IndexError("queue empty")
+            raise IndexError("Queue empty")
         return self.data[self.head]
-    
     def __str__(self):
-        output=f"The Queue is : "
+        output=f"The queue is: "
         if self.tail<self.head:
             output+=f"Empty"
         else:
-            for i in range (self.head,self.tail+1):
-                output+=f" {self.data[i]} "
+            for i in range(self.head,self.tail+1):
+                output+=f" {self.data[i]}"
         return output
 
 def queue_tester():
