@@ -23,7 +23,7 @@ class CircularQueue:
     def peek(self):
         if self.head==self.tail:
             raise IndexError("Queue is empty")
-        return self.data[self.tail % self.size]
+        return self.data[self.head % self.size]
     
     def length(self):
         return self.tail-self.head
@@ -51,47 +51,51 @@ def circular_queue_tester():
 
 class Stack:
     def __init__(self,size):
-        self.data=[]
+        self.data=[None]*size
         self.size=size
         self.top=-1
     
     def push(self,new_data):
-        if self.top<self.size:
-            self.data.append(new_data)
-            self.top+=1
-        else:
+        if self.top+1==self.size:
             raise OverflowError("Stack is Full")
+        self.top+=1
+        self.data[self.top]=new_data
+        
     def pop(self):
-        if self.top<0:
+        if self.top==-1:
             raise IndexError("Stack is empty")
         item=self.data[self.top]
-        del self.data[self.top]
+        self.data[self.top]=None
         self.top-=1
         return item
     
     def peek(self):
-        if self.top<0:
+        if self.top==-1:
             raise IndexError("Stack is empty")
         return self.data[self.top]
     
     def length(self):
         return self.top+1
+    
+    def __str__(self):
+        output=f"The Stack is : {self.data}"
+        return output
 
 def stack_tester():
     stack1=Stack(10)
     for i in range(10):
         stack1.push(i)
-    print(stack1.data)
+    print(stack1)
     items=[]
     items.append(stack1.pop())
     print(items)
-    print(stack1.data)
+    print(stack1)
 
 #stack_tester()
 
 class Queue:
     def __init__(self,size):
-        self.data=[]
+        self.data=[None]*size
         self.size=size
         self.head=0
         self.tail=-1
@@ -99,13 +103,14 @@ class Queue:
     def enqueue(self,new_data):
         if self.tail==self.size:
             raise OverflowError("Queue full")
-        self.data.append(new_data)
         self.tail+=1
+        self.data[self.tail]=new_data
     
     def dequeue(self):
-        if self.tail-self.head<=0:
+        if self.tail==self.head:
             raise IndexError("Queue empty")
         item=self.data[self.head]
+        self.data[self.head]=None
         self.head+=1
         return item
     
@@ -113,13 +118,13 @@ class Queue:
         return self.tail-self.head
     
     def peek(self):
-        if self.head ==self.tail:
+        if self.tail==self.head:
             raise IndexError("queue empty")
-        return self.data[self.tail]
+        return self.data[self.head]
     
     def __str__(self):
-        output=f"The Queue is :"
-        for i in range(self.head,self.tail+1):
+        output=f"The Queue is : "
+        for i in range (self.head,self.tail+1):
             output+=f" {self.data[i]} "
         return output
 
@@ -130,8 +135,8 @@ def queue_tester():
     print(q1)
     q1.dequeue()
     print(q1)
-    q1.enqueue(6)
-    print(q1)
+    #q1.enqueue(6)
+    #print(q1)
 
 #queue_tester()
 
