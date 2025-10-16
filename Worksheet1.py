@@ -120,6 +120,9 @@ class Queue:
         item=self.data[self.head]
         self.data[self.head]=None
         self.head +=1
+        if self.head>self.tail:
+            self.head=0
+            self.tail=-1
         return item
     
     def length(self):
