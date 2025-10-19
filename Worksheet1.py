@@ -6,7 +6,7 @@ class CircularQueue:
         self.tail=0
     
     def enqueue(self,new_data):
-        if self.tail-self.head+1==self.size:
+        if self.tail-self.head==self.size:
             raise OverflowError("Queue full")
         new_idx=self.tail%self.size
         self.data[new_idx]=new_data
